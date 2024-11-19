@@ -7,20 +7,22 @@ public class Main {
     }
 
     public static void exactVC(Graph graph) {
+        int bestVC = Integer.MAX_VALUE;
+
 
 
 
     }
 
     public static void inexactVC(Graph graph) {
-
+        int bestVC = Integer.MAX_VALUE;
     }
 
     public static void exactIS(Graph graph) {
-
+        int bestIS = Integer.MAX_VALUE;
     }
 
     public static void inexactIS(Graph graph) {
-
+        int bestIS = Integer.MAX_VALUE;
     }
 }
