@@ -6,6 +6,23 @@ public class Main {
         System.out.println("nathan IS STUPID");
     }
 
+    public static List<List<Integer>> powerset(List<Integer> set) {
+        List<List<Integer>> result = new ArrayList<>();
+        result.add(new ArrayList<>()); // Add the empty set
+
+        for (int num : set) {
+            int size = result.size();
+            for (int i = 0; i < size; i++) {
+                List<Integer> subset = new ArrayList<>(result.get(i));
+                subset.add(num);
+                result.add(subset);
+            }
+        }
+
+        return result;
+    }
+
+
     public static void exactVC(Graph graph) {
         int bestVC = Integer.MAX_VALUE;
 
