@@ -3,7 +3,7 @@ public class Main {
 
         Graph graph = new Graph("Graphs\\graph1.txt");
         System.out.println("Test");
-        System.out.println("HUGH IS STUPID");
+        System.out.println("nathan IS STUPID");
     }
 
     public static void exactVC(Graph graph) {
