@@ -1,17 +1,15 @@
 import com.sun.jdi.IntegerValue;
-
 import java.io.FileWriter;
 import java.util.*;
-import java.io.File;
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        Graph graph = new Graph("Graphs\\graph1.txt");
-        //System.out.println(exactIS(graph));
+        Graph graph = new Graph("Graphs\\trialGraph.txt");
+        System.out.println(exactIS(graph).toString() + " " + exactIS(graph).size());
+        System.out.println(exactVC(graph).toString() + " " + exactVC(graph).size());
         System.out.println(inexactVC(graph));
-        System.out.println(inexactIS(graph));
-        generateRandomGraph(10);
+//        generateRandomGraph(5);
     }
 
     public static List<List<Integer>> powerset(List<Integer> set) {
@@ -31,17 +29,39 @@ public class Main {
     }
 
 
-    public static void exactVC(Graph graph) {
-        int bestVC = Integer.MAX_VALUE;
-        List<Integer> nodeList = new ArrayList<>();
-        int[][] actualGraph = graph.getGraph();
-        for (int[] node : actualGraph) {
-            nodeList.add(node[0]);
+    public static List<Integer> exactVC(Graph graph) {
+//        int bestVC = Integer.MAX_VALUE;
+//        List<Integer> nodeList = new ArrayList<>();
+//        int[][] actualGraph = graph.getGraph();
+//        int counter = 0;
+//        for (int[] node : actualGraph) {
+//            nodeList.add(counter);
+//            counter++;
+//        }
+//
+//        List<List<Integer>> powerSet = powerset(nodeList);
+//
+//
+//        for (List<Integer> set : powerSet) {
+//            if (verifierVC(graph, set)) {
+//                if (set.size() < bestVC) {
+//                    bestVC = set.size();
+//                    System.out.println(set.toString());
+//                }
+//            }
+//        }
+//
+//        return bestVC;
+        List<Integer> bestIS = new ArrayList<>();
+        bestIS = exactIS(graph);
+        int[][] aGraph = graph.getGraph();
+        List<Integer> bestVC = new ArrayList<>();
+        for (int i = 0; i < aGraph.length; i++) {
+            if (!bestIS.contains(i)) {
+                bestVC.add(i);
+            }
         }
-
-        List<List<Integer>> powerSet = powerset(nodeList);
-
-        System.out.println("Test");
+        return bestVC;
     }
 
     public static int inexactVC(Graph g) {
@@ -73,6 +93,7 @@ public class Main {
             }
         }
 
+
         if(verifierVC(g, vc)){
             return vc.size();
         }
@@ -80,6 +101,9 @@ public class Main {
             System.out.println("ERROR ERROR");
             return 0;
         }
+
+
+
     }
 
     public static boolean verifierIS(Graph graph, List<Integer> set) {
@@ -89,7 +113,7 @@ public class Main {
             int numNeighbors = actualGraph[vertex].length;
 
             for (int j = 0; j < numNeighbors; j++) {
-                int neighbor = actualGraph[vertex][j] - 1;
+                int neighbor = actualGraph[vertex][j];
 
                 if (set.contains(neighbor)) {
                     return false;
@@ -100,37 +124,48 @@ public class Main {
         return true;
     }
 
-    public static boolean verifierVC(Graph g, List<Integer> set){
-        int [][] graph = g.getGraph();
-        List<Integer> coveredNodes = new ArrayList<Integer>();
-        for(int vertex : set){
-            if(!coveredNodes.contains(vertex)){
-                coveredNodes.add(vertex);
-            }
-            for(int linkedNode : graph[vertex]){
-                if(!coveredNodes.contains(linkedNode)){
-                    coveredNodes.add(linkedNode);
+//    public static boolean verifierVC(Graph g, List<Integer> set){
+//        int [][] graph = g.getGraph();
+//        List<Integer> coveredNodes = new ArrayList<Integer>();
+//        for(int vertex : set){
+//            if(!coveredNodes.contains(vertex)){
+//                coveredNodes.add(vertex);
+//            }
+//            for(int linkedNode : graph[vertex]){
+//                if(!coveredNodes.contains(linkedNode)){
+//                    coveredNodes.add(linkedNode);
+//                }
+//            }
+//        }
+//        if(coveredNodes.size() == graph.length){
+//            return true;
+//        }
+//        else{
+//            return false;
+//        }
+//    }
+
+
+    public static boolean verifierVC(Graph graph, List<Integer> set) {
+        int[][] aGraph = graph.getGraph();
+        // Check every edge in the graph
+        for (int i = 0; i < aGraph.length; i++) {
+            for (int neighbor : aGraph[i]) {
+                // For each edge (i, neighbor), at least one endpoint must be in the vertex cover
+                if (!set.contains(i) && !set.contains(neighbor)) {
+                    return false;  // Found an uncovered edge
                 }
             }
         }
-        if(coveredNodes.size() == graph.length){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return true;  // All edges are covered
     }
-    public static int exactIS(Graph graph) {
+    public static List<Integer> exactIS(Graph graph) {
         int bestIS = 0;
+        List<Integer> bestSet = new ArrayList<>();
         List<Integer> nodeList = new ArrayList<>();
         int[][] actualGraph = graph.getGraph();
         int counter = 0;
         for (int[] node : actualGraph) {
-
-            if (node.length == 0) {
-                return 0;
-            }
-
             nodeList.add(counter);
             counter++;
         }
@@ -142,16 +177,35 @@ public class Main {
             if (verifierIS(graph, set)) {
                 if (set.size() > bestIS) {
                     bestIS = set.size();
+                    bestSet = set;
                     System.out.println(set.toString());
                 }
             }
         }
 
-        return bestIS;
+        return bestSet;
     }
 
-    public static int inexactIS(Graph g) {
-        return 0;
+    public static int inexactIS(Graph graph) {
+        int[][] joshylisty = graph.getGraph();
+        int numofjoshy = joshylisty.length;
+        boolean[] coveredquestionmark = new boolean[numofjoshy];
+        List<Integer> IS = new ArrayList<>();
+        for(int i = 0;i<numofjoshy; i++){
+            if(!coveredquestionmark[i]){
+                IS.add(i);
+                for(int friend: joshylisty[i]){
+                    coveredquestionmark[friend] = true;
+                }
+            }
+        }
+        if(verifierIS(graph, IS)){
+            return IS.size();
+        }
+        else {
+            System.out.println("ERROR ERROR");
+            return 0;
+        }
     }
 
     public static void generateRandomGraph(int numNodes) {
