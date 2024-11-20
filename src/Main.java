@@ -43,7 +43,7 @@ public class Main {
         System.out.println("Test");
     }
 
-    public static void inexactVC(Graph graph) {
+    public static int inexactVC(Graph graph) {
         int[][] myListy = graph.getGraph();
         int numNodey = myListy.length;
         boolean[] pickedhm = new boolean[numNodey];
@@ -63,11 +63,12 @@ public class Main {
                 }
             }
         }
-
-
-        int[] thing = VC.stream().mapToInt(Integer::intValue).toArray();
-        for(int i = 0; i<thing.length; i++){
-            System.out.println(thing[i]);
+        if(verifierVC(graph, VC)){
+            return VC.size();
+        }
+        else {
+            System.out.println("ERROR ERROR");
+            return 0;
         }
     }
 
