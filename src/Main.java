@@ -94,11 +94,15 @@ public class Main {
         int bestIS = 0;
         List<Integer> nodeList = new ArrayList<>();
         int[][] actualGraph = graph.getGraph();
+        int counter = 0;
         for (int[] node : actualGraph) {
+
             if (node.length == 0) {
                 return 0;
             }
-            nodeList.add(node[0]);
+
+            nodeList.add(counter);
+            counter++;
         }
 
         List<List<Integer>> powerSet = powerset(nodeList);
@@ -108,6 +112,7 @@ public class Main {
             if (verifierIS(graph, set)) {
                 if (set.size() > bestIS) {
                     bestIS = set.size();
+                    System.out.println(set.toString());
                 }
             }
         }
