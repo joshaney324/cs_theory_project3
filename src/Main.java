@@ -10,6 +10,7 @@ public class Main {
 
         Graph graph = new Graph("Graphs\\trialGraph.txt");
         System.out.println(exactIS(graph));
+        inexactVC(graph);
         generateRandomGraph(10);
     }
 
@@ -44,7 +45,31 @@ public class Main {
     }
 
     public static void inexactVC(Graph graph) {
-        int bestVC = Integer.MAX_VALUE;
+        int[][] myListy = graph.getGraph();
+        int numNodey = myListy.length;
+        boolean[] pickedhm = new boolean[numNodey];
+        List<Integer> VC = new ArrayList<>();
+        for(int i= 0; i<numNodey; i++) {
+            if (pickedhm[i]) {
+                continue;
+            }
+            for (int friend : myListy[i]) {
+                if (!pickedhm[friend]) {
+                    VC.add(i);
+                    VC.add(friend);
+                    pickedhm[i] = true;
+                    pickedhm[friend] = true;
+                    break;
+
+                }
+            }
+        }
+
+
+        int[] thing = VC.stream().mapToInt(Integer::intValue).toArray();
+        for(int i = 0; i<thing.length; i++){
+            System.out.println(thing[i]);
+        }
     }
 
     public static boolean verifierIS(Graph graph, List<Integer> set) {
