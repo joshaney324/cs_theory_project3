@@ -7,7 +7,6 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-
         Graph graph = new Graph("Graphs\\trialGraph.txt");
         System.out.println(exactIS(graph));
         generateRandomGraph(10);
@@ -65,6 +64,26 @@ public class Main {
         return true;
     }
 
+    public static boolean verifierVC(Graph g, List<Integer> set){
+        int [][] graph = g.getGraph();
+        List<Integer> coveredNodes = new ArrayList<Integer>();
+        for(int vertex : set){
+            if(!coveredNodes.contains(vertex)){
+                coveredNodes.add(vertex);
+            }
+            for(int linkedNode : graph[vertex]){
+                if(!coveredNodes.contains(linkedNode)){
+                    coveredNodes.add(linkedNode);
+                }
+            }
+        }
+        if(coveredNodes.size() == graph.length){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public static int exactIS(Graph graph) {
         int bestIS = 0;
         List<Integer> nodeList = new ArrayList<>();
