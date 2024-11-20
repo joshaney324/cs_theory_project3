@@ -1,4 +1,3 @@
-import com.sun.jdi.IntegerValue;
 import java.io.FileWriter;
 import java.util.*;
 import java.io.IOException;
@@ -9,7 +8,7 @@ public class Main {
         System.out.println(exactIS(graph).toString() + " " + exactIS(graph).size());
         System.out.println(exactVC(graph).toString() + " " + exactVC(graph).size());
         System.out.println(inexactVC(graph));
-//        generateRandomGraph(5);
+//        generateRandomGraph(10);
     }
 
     public static List<List<Integer>> powerset(List<Integer> set) {
@@ -52,8 +51,8 @@ public class Main {
 //        }
 //
 //        return bestVC;
-        List<Integer> bestIS = new ArrayList<>();
-        bestIS = exactIS(graph);
+
+        List<Integer> bestIS = exactIS(graph);
         int[][] aGraph = graph.getGraph();
         List<Integer> bestVC = new ArrayList<>();
         for (int i = 0; i < aGraph.length; i++) {
@@ -162,7 +161,7 @@ public class Main {
                 if (set.size() > bestIS) {
                     bestIS = set.size();
                     bestSet = set;
-                    System.out.println(set.toString());
+//                    System.out.println(set.toString());
                 }
             }
         }
