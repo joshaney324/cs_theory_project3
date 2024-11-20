@@ -1,3 +1,5 @@
+import com.sun.jdi.IntegerValue;
+
 import java.io.FileWriter;
 import java.util.List;
 import java.util.ArrayList;
@@ -140,8 +142,26 @@ public class Main {
         return bestIS;
     }
 
-    public static void inexactIS(Graph graph) {
-        int bestIS = Integer.MAX_VALUE;
+    public static int inexactIS(Graph graph) {
+        int[][] joshylisty = graph.getGraph();
+        int numofjoshy = joshylisty.length;
+        boolean[] coveredquestionmark = new boolean[numofjoshy];
+        List<Integer> IS = new ArrayList<>();
+        for(int i = 0;i<numofjoshy; i++){
+            if(!coveredquestionmark[i]){
+                IS.add(i);
+                for(int friend: joshylisty[i]){
+                    coveredquestionmark[friend] = true;
+                }
+            }
+        }
+        if(verifierIS(graph, IS)){
+            return IS.size();
+        }
+        else {
+            System.out.println("ERROR ERROR");
+            return 0;
+        }
     }
 
     public static void generateRandomGraph(int numNodes) {
