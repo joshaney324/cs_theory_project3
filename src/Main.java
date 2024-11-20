@@ -1,17 +1,16 @@
 import com.sun.jdi.IntegerValue;
 
 import java.io.FileWriter;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-        Graph graph = new Graph("Graphs\\trialGraph.txt");
-        System.out.println(exactIS(graph));
-        inexactVC(graph);
+        Graph graph = new Graph("Graphs\\graph1.txt");
+        //System.out.println(exactIS(graph));
+        System.out.println(inexactVC(graph));
+        System.out.println(inexactIS(graph));
         generateRandomGraph(10);
     }
 
@@ -45,28 +44,37 @@ public class Main {
         System.out.println("Test");
     }
 
-    public static int inexactVC(Graph graph) {
-        int[][] myListy = graph.getGraph();
-        int numNodey = myListy.length;
-        boolean[] pickedhm = new boolean[numNodey];
-        List<Integer> VC = new ArrayList<>();
-        for(int i= 0; i<numNodey; i++) {
-            if (pickedhm[i]) {
-                continue;
+    public static int inexactVC(Graph g) {
+        int[][] graph = g.getGraph();
+        Dictionary<Integer, int[]> dict= new Hashtable<>();
+        List<Integer> tabooList = new ArrayList<Integer>();
+        for (int i = 0; i < graph.length; i++) {
+            dict.put(i, graph[i]);
+        }
+        int max = 0;
+        int startingNode = 0;
+        List<Integer> vc = new ArrayList<Integer>();
+        while(dict.size() > 0) {
+            max = 0;
+            for (int i = 0; i < graph.length; i++) {
+                if (graph[i].length > max && !tabooList.contains(i)) {
+                    startingNode = i;
+                    max = graph[i].length;
+                }
             }
-            for (int friend : myListy[i]) {
-                if (!pickedhm[friend]) {
-                    VC.add(i);
-                    VC.add(friend);
-                    pickedhm[i] = true;
-                    pickedhm[friend] = true;
-                    break;
-
+            vc.add(startingNode);
+            tabooList.add(startingNode);
+            dict.remove(startingNode);
+            for (int i = 0; i< graph[startingNode].length; i++){
+                if(!vc.contains(graph[startingNode][i])){
+                    tabooList.add(graph[startingNode][i]);
+                    dict.remove(graph[startingNode][i]);
                 }
             }
         }
-        if(verifierVC(graph, VC)){
-            return VC.size();
+
+        if(verifierVC(g, vc)){
+            return vc.size();
         }
         else {
             System.out.println("ERROR ERROR");
@@ -142,26 +150,8 @@ public class Main {
         return bestIS;
     }
 
-    public static int inexactIS(Graph graph) {
-        int[][] joshylisty = graph.getGraph();
-        int numofjoshy = joshylisty.length;
-        boolean[] coveredquestionmark = new boolean[numofjoshy];
-        List<Integer> IS = new ArrayList<>();
-        for(int i = 0;i<numofjoshy; i++){
-            if(!coveredquestionmark[i]){
-                IS.add(i);
-                for(int friend: joshylisty[i]){
-                    coveredquestionmark[friend] = true;
-                }
-            }
-        }
-        if(verifierIS(graph, IS)){
-            return IS.size();
-        }
-        else {
-            System.out.println("ERROR ERROR");
-            return 0;
-        }
+    public static int inexactIS(Graph g) {
+        return 0;
     }
 
     public static void generateRandomGraph(int numNodes) {
