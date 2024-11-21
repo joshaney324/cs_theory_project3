@@ -26,42 +26,29 @@ public class GraphToolBox {
 
 
     // return (in polynomial time) an array containing the vertex numbers of a VC.
-    public static int inexactVC(Graph g) {
+    public static int[] inexactVC(Graph g) {
+        int[] approximateIS = inexactIS(g);
+        List<Integer> approximateISList = new ArrayList<>();
+        List<Integer> approximateVCList = new ArrayList<>();
         int[][] graph = g.getGraph();
-        Dictionary<Integer, int[]> dict = new Hashtable<>();
-        List<Integer> tabooList = new ArrayList<Integer>();
-        for (int i = 0; i < graph.length; i++) {
-            dict.put(i, graph[i]);
+
+        for (int vertex : approximateIS) {
+            approximateISList.add(vertex);
         }
-        int max = 0;
-        int startingNode = 0;
-        List<Integer> vc = new ArrayList<Integer>();
-        while (dict.size() > 0) {
-            max = 0;
-            for (int i = 0; i < graph.length; i++) {
-                if (graph[i].length > max && !tabooList.contains(i)) {
-                    startingNode = i;
-                    max = graph[i].length;
-                }
-            }
-            vc.add(startingNode);
-            tabooList.add(startingNode);
-            dict.remove(startingNode);
-            for (int i = 0; i < graph[startingNode].length; i++) {
-                if (!vc.contains(graph[startingNode][i])) {
-                    tabooList.add(graph[startingNode][i]);
-                    dict.remove(graph[startingNode][i]);
-                }
+
+        for (int i = 0; i < graph.length; i ++) {
+            if (!approximateISList.contains(i)) {
+                approximateVCList.add(i);
             }
         }
 
+        int[] vertexList = new int[approximateVCList.size()];
 
-        if (verifierVC(g, vc)) {
-            return vc.size();
-        } else {
-            System.out.println("ERROR ERROR");
-            return 0;
+        for (int i = 0; i < approximateVCList.size(); i++) {
+            vertexList[i] = approximateVCList.get(i);
         }
+
+        return vertexList;
     }
     
     // return an array containing the vertex numbers of an optimal IS.
@@ -149,32 +136,6 @@ public class GraphToolBox {
         return vertexList;
     }
 
-//        int[][] joshylisty = inputGraph.getGraph();
-//        int numofjoshy = joshylisty.length;
-//        boolean[] coveredquestionmark = new boolean[numofjoshy];
-//        List<Integer> IS = new ArrayList<>();
-//        for (int i = 0; i < numofjoshy; i++) {
-//            if (!coveredquestionmark[i]) {
-//                IS.add(i);
-//                for (int friend : joshylisty[i]) {
-//                    coveredquestionmark[friend] = true;
-//                }
-//            }
-//        }
-//        if (verifierIS(inputGraph, IS)) {
-//            int[] vertexLabels = new int[IS.size()];
-//            int i = 0;
-//            for (Integer value : IS) {
-//                vertexLabels[i++] = value;
-//            }
-//
-//            return vertexLabels;
-//            //            return IS.size();
-//        } else {
-//            System.out.println("ERROR ERROR");
-//            return null;
-//        }
-//    }
 
     public static List<List<Integer>> powerset(List<Integer> set) {
         List<List<Integer>> result = new ArrayList<>();
