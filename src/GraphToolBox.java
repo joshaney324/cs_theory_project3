@@ -110,7 +110,6 @@ public class GraphToolBox {
             int pastSize = optimalSize;
             for (int i = 0; i < graph.length; i++) {
                 if (!bestSet.contains(i)) {
-//                    List<Integer> newSet = bestSet;
                     List<Integer> newSet = new ArrayList<>(bestSet);
                     newSet.add(i);
 

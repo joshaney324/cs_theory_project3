@@ -6,15 +6,17 @@ public class Main {
         int averageIS = 0;
         int averageVC = 0;
         for (int i = 10; i < 2000; i+=10) {
-            averageIS = 0;
-            averageVC = 0;
-            for (int j = 0; j < 50; j++) {
+//            List<Long> times = new ArrayList<>();
+            for (int j = 0; j < 1; j++) {
                 GraphToolBox.generateRandomGraph(i);
                 Graph graph = new Graph("Graphs\\trialGraph.txt");
-                averageVC += (GraphToolBox.inexactVC(graph)).length;
+                long startTime = System.nanoTime();
+                averageIS += (GraphToolBox.inexactVC(graph)).length;
+                long endTime = System.nanoTime();
+                System.out.println("average IS size for graph of size: " + graph.getGraph().length + " is " + (endTime - startTime) / 1000000.0);
             }
-            averageVC /= 50;
-            System.out.println("average VC size for graph of size: " +i + " is " + averageVC);
+            averageIS /= 50;
+//            System.out.println("average IS size for graph of size: " +i + " is " + averageIS);
         }
         Graph graph = new Graph("Graphs\\trialGraph.txt");
     }
