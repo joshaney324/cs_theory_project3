@@ -98,34 +98,83 @@ public class GraphToolBox {
         return vertexLabels;
     }
     
-    // return (in polynomial time) an array containing the vertex numbers of a IS.
+    // return (in polynomial time) an array containing the vertex numbers of an IS.
     public static int[] inexactIS(Graph inputGraph) {
-        int[][] joshylisty = inputGraph.getGraph();
-        int numofjoshy = joshylisty.length;
-        boolean[] coveredquestionmark = new boolean[numofjoshy];
-        List<Integer> IS = new ArrayList<>();
-        for (int i = 0; i < numofjoshy; i++) {
-            if (!coveredquestionmark[i]) {
-                IS.add(i);
-                for (int friend : joshylisty[i]) {
-                    coveredquestionmark[friend] = true;
+
+        int[][] graph = inputGraph.getGraph();
+        List<Integer> baseIS = new ArrayList<>();
+        for (int i = 0; i < graph.length; i++) {
+            boolean isAdjacent = false;
+            for (int j = 0; j < graph[i].length; j++) {
+                if (baseIS.contains(graph[i][j])) {
+                    isAdjacent = true;
                 }
             }
+            if (!isAdjacent) {
+                baseIS.add(i);
+            }
         }
-        if (verifierIS(inputGraph, IS)) {
-            int[] vertexLabels = new int[IS.size()];
-            int i = 0;
-            for (Integer value : IS) {
-                vertexLabels[i++] = value;
+
+        int optimalSize = baseIS.size();
+        List<Integer> bestSet = baseIS;
+        boolean improved = true;
+
+        while (improved) {
+            int pastSize = optimalSize;
+            for (int i = 0; i < graph.length; i++) {
+                if (!bestSet.contains(i)) {
+//                    List<Integer> newSet = bestSet;
+                    List<Integer> newSet = new ArrayList<>(bestSet);
+                    newSet.add(i);
+
+                    if (verifierIS(inputGraph, newSet)) {
+                        if (newSet.size() > optimalSize) {
+                            bestSet = newSet;
+                            optimalSize = newSet.size();
+                        }
+                    }
+                }
             }
 
-            return vertexLabels;
-            //            return IS.size();
-        } else {
-            System.out.println("ERROR ERROR");
-            return null;
+            if (pastSize == optimalSize) {
+                improved = false;
+            }
         }
+
+        int[] vertexList = new int[bestSet.size()];
+        for (int i = 0; i < bestSet.size(); i++) {
+            vertexList[i] = bestSet.get(i);
+        }
+
+        return vertexList;
     }
+
+//        int[][] joshylisty = inputGraph.getGraph();
+//        int numofjoshy = joshylisty.length;
+//        boolean[] coveredquestionmark = new boolean[numofjoshy];
+//        List<Integer> IS = new ArrayList<>();
+//        for (int i = 0; i < numofjoshy; i++) {
+//            if (!coveredquestionmark[i]) {
+//                IS.add(i);
+//                for (int friend : joshylisty[i]) {
+//                    coveredquestionmark[friend] = true;
+//                }
+//            }
+//        }
+//        if (verifierIS(inputGraph, IS)) {
+//            int[] vertexLabels = new int[IS.size()];
+//            int i = 0;
+//            for (Integer value : IS) {
+//                vertexLabels[i++] = value;
+//            }
+//
+//            return vertexLabels;
+//            //            return IS.size();
+//        } else {
+//            System.out.println("ERROR ERROR");
+//            return null;
+//        }
+//    }
 
     public static List<List<Integer>> powerset(List<Integer> set) {
         List<List<Integer>> result = new ArrayList<>();
