@@ -4,11 +4,19 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        Graph graph = new Graph("Graphs\\graph1.txt");
-//        System.out.println(Arrays.toString(GraphToolBox.optimalIS(graph)) + " " + GraphToolBox.optimalIS(graph).length);
-//        System.out.println(GraphToolBox.exactVC(graph).toString() + " " + GraphToolBox.exactVC(graph).size());
-        System.out.println(GraphToolBox.inexactVC(graph).length);
-        System.out.println(Arrays.toString(GraphToolBox.inexactIS(graph)) + " " + GraphToolBox.inexactIS(graph).length);
-        GraphToolBox.generateRandomGraph(100);
+        int averageIS = 0;
+        int averageVC = 0;
+        for (int i = 10; i < 2000; i+=10) {
+            averageIS = 0;
+            averageVC = 0;
+            for (int j = 0; j < 50; j++) {
+                GraphToolBox.generateRandomGraph(i);
+                Graph graph = new Graph("Graphs\\trialGraph.txt");
+                averageVC += (GraphToolBox.inexactVC(graph)).length;
+            }
+            averageVC /= 50;
+            System.out.println("average VC size for graph of size: " +i + " is " + averageVC);
+        }
+        Graph graph = new Graph("Graphs\\trialGraph.txt");
     }
 }
